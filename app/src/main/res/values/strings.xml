@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">CarWash App</string>
+
+    <!-- HomeScreen -->
+    <string name="title_homescreen">Inicio</string>
+    <string name="title_card_services">Servicios</string>
+    <string name="subtitle_card_services">Listar servicios activos y agregar nuevos</string>
+    <string name="title_card_clientsvip">Clientes VIP</string>
+    <string name="subtitle_card_clientsvip">Nuestros clientes con membresía</string>
+    <string name="title_card_admin">Administración</string>
+    <string name="subtitle_card_admin">Reportes y estadísticas generales</string>
+
+
+    <!-- ContentDescription -->
+    <string name="desc_image_cards">Imágenes descriptivas</string>
+
 </resources>
