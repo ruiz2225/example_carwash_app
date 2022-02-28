@@ -10,8 +10,26 @@
     <string name="title_card_admin">Administración</string>
     <string name="subtitle_card_admin">Reportes y estadísticas generales</string>
 
+    <!-- ServiceFormScreen -->
+    <string name="text_topBar">Nuevo servicio</string>
+    <string name="text_title_serviceForm">Ingresa todos los campos por favor</string>
+    <string name="ft_plate">Placa</string>
+    <string name="ft_identification">Identificación</string>
+    <string name="ft_name">Nombres</string>
+    <string name="ft_surname">Apellidos</string>
+    <string name="ft_brand">Marca auto</string>
+    <string name="ft_serviceType">Tipo de servicio</string>
+    <string name="ft_observation">Observaciones</string>
+    <string name="btn_newService">Guardar servicio</string>
+    <string name="btn_updateService">Actualizar servicio</string>
+
 
     <!-- ContentDescription -->
     <string name="desc_image_cards">Imágenes descriptivas</string>
+    <string name="desc_icon_spinners">Iconos Spinner</string>
+    <string name="desc_icon_cards">Iconos Card</string>
+    <string name="desc_icon_button">Icono botón</string>
+    <string name="desc_icon_field_text">Iconos FieldText</string>
+
 
 </resources>
