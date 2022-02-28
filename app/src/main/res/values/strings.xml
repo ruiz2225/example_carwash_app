@@ -23,6 +23,9 @@
     <string name="btn_newService">Guardar servicio</string>
     <string name="btn_updateService">Actualizar servicio</string>
 
+    <!-- ServiceListScreen-->
+    <string name="title_topbar_lisscreen">Listado de servicios</string>
+
 
     <!-- ContentDescription -->
     <string name="desc_image_cards">Imágenes descriptivas</string>

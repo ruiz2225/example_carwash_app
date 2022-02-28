@@ -18,10 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.carwashapp.R
+import com.example.carwashapp.model.Service
 import com.example.carwashapp.ui.theme.YellowPlate
 
 @Composable
 fun ServiceListItem(
+    service: Service,
+    onItemSelected: (String) -> Unit
 ){
 
     Card(elevation = 0.dp, modifier = Modifier
@@ -29,7 +32,7 @@ fun ServiceListItem(
         .height(72.dp)) {
         Row(modifier = Modifier
             .fillMaxSize()
-            .clickable { }) {
+            .clickable { onItemSelected(service.id) }) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
@@ -39,7 +42,7 @@ fun ServiceListItem(
                     .height(56.dp)
                     .background(YellowPlate)) {
                 Text(
-                    text = "ABC321",
+                    text = service.plate,
                     color = Color.Black,
                     style = MaterialTheme.typography.h6
                 )
@@ -49,8 +52,8 @@ fun ServiceListItem(
                 .fillMaxSize()
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp)
                 .weight(6f)) {
-                Text(text = "Pepito Pérez", style = MaterialTheme.typography.subtitle1)
-                Text(text = "Premium", style = MaterialTheme.typography.caption)
+                Text(text = service.namesClient, style = MaterialTheme.typography.subtitle1)
+                Text(text = service.serviceType, style = MaterialTheme.typography.caption)
             }
             Icon(imageVector = Icons.Default.CheckCircle, contentDescription = stringResource(id = R.string.desc_icon_cards), modifier = Modifier
                 .weight(1f)
@@ -63,5 +66,5 @@ fun ServiceListItem(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewServiceListItem(){
-    ServiceListItem()
+
 }

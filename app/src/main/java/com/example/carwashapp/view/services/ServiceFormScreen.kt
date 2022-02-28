@@ -22,9 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.carwashapp.R
 import com.example.carwashapp.ui.theme.GreenOk
+import com.example.carwashapp.utils.ServiceDetailState
 
 @Composable
-fun ServiceFormScreen(){
+fun ServiceFormScreen(
+    state: ServiceDetailState,
+    addNewService: (String, Int, String, String, String, String, String) -> Unit,
+    updateService: (String, Int, String, String, String, String, String) -> Unit){
     Scaffold(topBar = {
         TopAppBar() {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.desc_icon_button),
@@ -39,28 +43,50 @@ fun ServiceFormScreen(){
     }) {
         val scrollState = rememberScrollState()
         Column(modifier = Modifier.verticalScroll(scrollState)) {
-            FormService()
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .height(48.dp), onClick = { /*Acción para guardar los datos del nuevo servicio*/ }) {
-                Icon(modifier = Modifier.padding(end = 8.dp), imageVector = Icons.Filled.Send, contentDescription = stringResource(id = R.string.desc_icon_button))
-                Text(text = stringResource(id = R.string.btn_newService))
+            FormService(state)
+            if(state.service?.id != null){
+                Button(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+                    .height(36.dp), onClick = { updateService(plate, Integer.parseInt(identification), names, surnames, brand, serviceType, observation) }) {
+                    Icon(modifier = Modifier.padding(end = 8.dp), imageVector = Icons.Filled.Edit, contentDescription = "Send Icon")
+                    Text(text = stringResource(id = R.string.btn_updateService))
+                }
+            }else{
+                Button(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+                    .height(36.dp), onClick = { addNewService(plate, Integer.parseInt(identification), names, surnames, brand, serviceType, observation) }) {
+                    Icon(modifier = Modifier.padding(end = 8.dp), imageVector = Icons.Filled.Send, contentDescription = "Send Icon")
+                    Text(text = stringResource(id = R.string.btn_newService))
+                }
             }
         }
     }
+
 }
 
+var plate: String = ""
+var identification: String = ""
+var names: String = ""
+var surnames: String = ""
+var brand: String = ""
+var serviceType: String = ""
+var observation: String = ""
+
 @Composable
-fun FormService(){
+fun FormService(state: ServiceDetailState){
+    var id = ""
+    if(state.service?.identificationClient != null)
+        id = state.service.identificationClient.toString()
     TitleNewService()
-    Plate()
-    IdentificationClient()
-    NamesClient()
-    SurnamesClient()
-    BrandCar()
-    ServiceType()
-    Observations()
+    Plate(state)
+    IdentificationClient(id)
+    NamesClient(state)
+    SurnamesClient(state)
+    BrandCar(state)
+    ServiceType(state)
+    Observations(state)
 }
 
 @Composable
@@ -76,8 +102,9 @@ fun TitleNewService(){
 }
 
 @Composable
-fun Plate(){
-    var value by remember { mutableStateOf("") }
+fun Plate(state: ServiceDetailState){
+    var value by remember (state.service?.plate) { mutableStateOf(state.service?.plate ?: "")}
+    plate = value
     val maxCharacter = 6
     var stateField by remember { mutableStateOf(0) }
     var isError by remember { mutableStateOf(false) }
@@ -86,6 +113,7 @@ fun Plate(){
         onValueChange = {
             if(it.length <= maxCharacter){
                 value = it
+                plate = value
             }
             if(it.length > 0 && it.length < maxCharacter){
                 stateField = 1
@@ -120,8 +148,9 @@ fun Plate(){
 }
 
 @Composable
-fun IdentificationClient(){
-    var value by remember { mutableStateOf("") }
+fun IdentificationClient(id: String){
+    var value by remember (id) { mutableStateOf(id)}
+    identification = value
     val maxCharacter = 10
     val minCharacter = 7
     var stateField by remember { mutableStateOf(0) }
@@ -158,11 +187,14 @@ fun IdentificationClient(){
 }
 
 @Composable
-fun NamesClient(){
-    var value by remember { mutableStateOf("") }
+fun NamesClient(state: ServiceDetailState){
+    var value by remember (state.service?.namesClient) { mutableStateOf(state.service?.namesClient ?: "")}
+    names = value
     var stateField by remember { mutableStateOf(0) }
     OutlinedTextField(value = value,
-        onValueChange = {value = it},
+        onValueChange = {
+            value = it
+            names = value},
         trailingIcon = {
             when(stateField){
                 1 -> {
@@ -183,10 +215,13 @@ fun NamesClient(){
 }
 
 @Composable
-fun SurnamesClient(){
-    var value by remember { mutableStateOf("") }
+fun SurnamesClient(state: ServiceDetailState){
+    var value by remember (state.service?.surnamesClient) { mutableStateOf(state.service?.surnamesClient ?: "")}
+    surnames = value
     OutlinedTextField(value = value,
-        onValueChange = { value = it },
+        onValueChange = {
+            value = it
+            surnames = value},
         label = { Text(text = stringResource(id = R.string.ft_surname)) },
         singleLine = true,
         modifier = Modifier
@@ -197,11 +232,11 @@ fun SurnamesClient(){
 }
 
 @Composable
-fun BrandCar(){
+fun BrandCar(state: ServiceDetailState){
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("Alfa Romeo", "Audi", "BMW", "Chevrolet", "Citroën", "Fiat", "Ford", "Honda", "Hyundai", "KIA", "Mazda", "Nissan", "Toyota", "Volkswagen")
-    var selectedText by remember { mutableStateOf("") }
-
+    var selectedText by remember (state.service?.brand) { mutableStateOf(state.service?.brand ?: "")}
+    brand = selectedText
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
     val icon = if (expanded)
@@ -245,10 +280,12 @@ fun BrandCar(){
 }
 
 @Composable
-fun ServiceType(){
+fun ServiceType(state: ServiceDetailState){
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("Regular", "Silver", "Premium")
-    var selectedText by remember  { mutableStateOf("") }
+    var selectedText by remember (state.service?.serviceType) { mutableStateOf(state.service?.serviceType ?: "")}
+    serviceType = selectedText
+
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
     val icon = if (expanded)
@@ -293,21 +330,17 @@ fun ServiceType(){
 }
 
 @Composable
-fun Observations(){
-    var value by remember  { mutableStateOf("") }
+fun Observations(state: ServiceDetailState){
+    var value by remember (state.service?.observations) { mutableStateOf(state.service?.observations ?: "")}
+    observation = value
     OutlinedTextField(value = value,
         onValueChange = {
-            value = it},
+            value = it
+            observation = value},
         label = { Text(text = stringResource(id = R.string.ft_observation)) },
         singleLine = false,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 12.dp, end = 12.dp, bottom = 24.dp)
             .height(120.dp))
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun PreviewFormService(){
-    ServiceFormScreen()
 }

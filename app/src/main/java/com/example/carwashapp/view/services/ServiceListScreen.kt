@@ -12,16 +12,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.carwashapp.R
+import com.example.carwashapp.utils.ServiceListState
 
 @Composable
-fun ServiceListScreen(){
+fun ServiceListScreen(
+    state: ServiceListState,
+    isRefreshing: Boolean,
+    refreshData: () -> Unit,
+    onItemSelect: (String) -> Unit){
     Scaffold(topBar = {
         TopAppBar() {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.desc_icon_button),
-                modifier = Modifier.clickable{
-                    //
-                }.padding(start = 16.dp))
-            Text(text = "Listado de servicios",
+                modifier = Modifier
+                    .clickable {
+                        //
+                    }
+                    .padding(start = 16.dp))
+            Text(text = stringResource(id = R.string.title_topbar_lisscreen),
                 modifier = Modifier.padding(start = 32.dp))
         }
     }, floatingActionButton = {
@@ -29,12 +36,6 @@ fun ServiceListScreen(){
             Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.desc_icon_button))
         }
     }) {
-        ServiceList()
+        ServiceList(state, isRefreshing, refreshData, onItemSelect)
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun PreviewServiceListScreen(){
-    ServiceListScreen()
 }
