@@ -1,6 +1,5 @@
 package com.example.carwashapp.view.services
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.carwashapp.R
 import com.example.carwashapp.model.Service
@@ -52,7 +50,7 @@ fun ServiceListItem(
                 .fillMaxSize()
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp)
                 .weight(6f)) {
-                Text(text = service.namesClient, style = MaterialTheme.typography.subtitle1)
+                Text(text = service.namesClient+" "+service.surnamesClient, style = MaterialTheme.typography.subtitle1)
                 Text(text = service.serviceType, style = MaterialTheme.typography.caption)
             }
             Icon(imageVector = Icons.Default.CheckCircle, contentDescription = stringResource(id = R.string.desc_icon_cards), modifier = Modifier
@@ -61,10 +59,4 @@ fun ServiceListItem(
         }
 
     }
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun PreviewServiceListItem(){
-
 }

@@ -47,4 +47,8 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun deleteService(serviceId: String){
+        serviceRepository.deleteService(serviceId)
+    }
+
 }

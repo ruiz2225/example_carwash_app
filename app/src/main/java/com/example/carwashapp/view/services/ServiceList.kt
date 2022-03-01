@@ -1,6 +1,5 @@
 package com.example.carwashapp.view.services
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -32,7 +31,8 @@ fun ServiceList(
     state: ServiceListState,
     isRefreshing: Boolean,
     refreshData: () -> Unit,
-    onItemSelect: (String) -> Unit
+    onItemSelect: (String) -> Unit,
+    deleteService: (String) -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -45,13 +45,15 @@ fun ServiceList(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(
-                    items = state.services
+                    items = state.services,
+                    key = { service ->
+                        service.id //El Key lo usamos para prevenir el error de recomposición de la lista
+                    }
                 ){  service ->
                     Divider()
                     var isDeleted by remember { mutableStateOf(false) }
                     val dismissState = rememberDismissState(
                         confirmStateChange = {
-                            Log.d("BookList", "Dismiss value: ${it.name}")
                             if(it == DismissValue.DismissedToEnd) isDeleted = !isDeleted
                             it != DismissValue.DismissedToEnd
                         }
@@ -100,7 +102,7 @@ fun ServiceList(
                         }
                     ) {
                         if(isDeleted) {
-                            // TODO("DELETE BOOK")
+                            deleteService(service.id)
                         } else {
                             ServiceListItem(service, onItemSelect)
                         }

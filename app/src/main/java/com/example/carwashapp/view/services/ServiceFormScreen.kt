@@ -17,15 +17,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.navigation.NavController
 import com.example.carwashapp.R
 import com.example.carwashapp.ui.theme.GreenOk
 import com.example.carwashapp.utils.ServiceDetailState
 
+
 @Composable
 fun ServiceFormScreen(
+    navController: NavController,
     state: ServiceDetailState,
     addNewService: (String, Int, String, String, String, String, String) -> Unit,
     updateService: (String, Int, String, String, String, String, String) -> Unit){
@@ -34,7 +36,7 @@ fun ServiceFormScreen(
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.desc_icon_button),
                 modifier = Modifier
                     .clickable {
-
+                        navController.popBackStack()
                     }
                     .padding(start = 16.dp))
             Text(text = stringResource(id = R.string.text_topBar),
@@ -48,7 +50,7 @@ fun ServiceFormScreen(
                 Button(modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp)
-                    .height(36.dp), onClick = { updateService(plate, Integer.parseInt(identification), names, surnames, brand, serviceType, observation) }) {
+                    .height(48.dp), onClick = { updateService(plate, Integer.parseInt(identification), names, surnames, brand, serviceType, observation) }) {
                     Icon(modifier = Modifier.padding(end = 8.dp), imageVector = Icons.Filled.Edit, contentDescription = "Send Icon")
                     Text(text = stringResource(id = R.string.btn_updateService))
                 }
@@ -56,7 +58,7 @@ fun ServiceFormScreen(
                 Button(modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp)
-                    .height(36.dp), onClick = { addNewService(plate, Integer.parseInt(identification), names, surnames, brand, serviceType, observation) }) {
+                    .height(48.dp), onClick = { addNewService(plate, Integer.parseInt(identification), names, surnames, brand, serviceType, observation) }) {
                     Icon(modifier = Modifier.padding(end = 8.dp), imageVector = Icons.Filled.Send, contentDescription = "Send Icon")
                     Text(text = stringResource(id = R.string.btn_newService))
                 }
@@ -66,13 +68,14 @@ fun ServiceFormScreen(
 
 }
 
-var plate: String = ""
-var identification: String = ""
-var names: String = ""
-var surnames: String = ""
-var brand: String = ""
-var serviceType: String = ""
-var observation: String = ""
+private var plate: String = ""
+private var identification: String = ""
+private var names: String = ""
+private var surnames: String = ""
+private var brand: String = ""
+private var serviceType: String = ""
+private var observation: String = ""
+
 
 @Composable
 fun FormService(state: ServiceDetailState){
@@ -171,13 +174,19 @@ fun IdentificationClient(id: String){
         trailingIcon = {
             when(stateField){
                 1 -> {
-                    Icon(imageVector = Icons.Default.Info, contentDescription = stringResource(id = R.string.desc_icon_field_text))
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = stringResource(id = R.string.desc_icon_field_text))
                 }
                 2 -> {
-                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = stringResource(id = R.string.desc_icon_field_text))
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = stringResource(id = R.string.desc_icon_field_text),
+                        tint = GreenOk)
                 }
             }
         },
+        isError = isError,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         label = { Text(text = stringResource(id = R.string.ft_identification)) },
         singleLine = true,
@@ -190,21 +199,34 @@ fun IdentificationClient(id: String){
 fun NamesClient(state: ServiceDetailState){
     var value by remember (state.service?.namesClient) { mutableStateOf(state.service?.namesClient ?: "")}
     names = value
+    val minCharacter = 3
     var stateField by remember { mutableStateOf(0) }
+    var isError by remember { mutableStateOf(false) }
     OutlinedTextField(value = value,
         onValueChange = {
-            value = it
-            names = value},
+                value = it
+                names = value
+            if(it.length > 0 && it.length < minCharacter){
+                stateField = 1
+                isError = it.length < minCharacter
+            }else{
+                stateField = 2
+                isError = false
+            }},
         trailingIcon = {
             when(stateField){
                 1 -> {
-                    Icon(imageVector = Icons.Default.Info, contentDescription = stringResource(id = R.string.desc_icon_field_text))
+                    Icon(imageVector = Icons.Default.Info,
+                        contentDescription = stringResource(id = R.string.desc_icon_field_text))
                 }
                 2 -> {
-                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = stringResource(id = R.string.desc_icon_field_text))
+                    Icon(imageVector = Icons.Default.CheckCircle,
+                        contentDescription = stringResource(id = R.string.desc_icon_field_text),
+                        tint = GreenOk)
                 }
             }
         },
+        isError = isError,
         label = { Text(text = stringResource(id = R.string.ft_name)) },
         singleLine = true,
         modifier = Modifier
@@ -218,10 +240,34 @@ fun NamesClient(state: ServiceDetailState){
 fun SurnamesClient(state: ServiceDetailState){
     var value by remember (state.service?.surnamesClient) { mutableStateOf(state.service?.surnamesClient ?: "")}
     surnames = value
+    val minCharacter = 3
+    var stateField by remember { mutableStateOf(0) }
+    var isError by remember { mutableStateOf(false) }
     OutlinedTextField(value = value,
         onValueChange = {
             value = it
-            surnames = value},
+            surnames = value
+            if(it.length > 0 && it.length < minCharacter){
+                stateField = 1
+                isError = it.length < minCharacter
+            }else{
+                stateField = 2
+                isError = false
+            }},
+        trailingIcon = {
+            when(stateField){
+                1 -> {
+                    Icon(imageVector = Icons.Default.Info,
+                        contentDescription = stringResource(id = R.string.desc_icon_field_text))
+                }
+                2 -> {
+                    Icon(imageVector = Icons.Default.CheckCircle,
+                        contentDescription = stringResource(id = R.string.desc_icon_field_text),
+                        tint = GreenOk)
+                }
+            }
+        },
+        isError = isError,
         label = { Text(text = stringResource(id = R.string.ft_surname)) },
         singleLine = true,
         modifier = Modifier
@@ -343,4 +389,12 @@ fun Observations(state: ServiceDetailState){
             .fillMaxWidth()
             .padding(start = 12.dp, end = 12.dp, bottom = 24.dp)
             .height(120.dp))
+}
+
+private fun isValid():Boolean{
+    var isValidForm = false
+    if(plate.length == 6 && identification.length >= 6 && names.length > 3 && surnames.length > 3 && brand.isNotBlank() && serviceType.isNotBlank())
+        isValidForm = true
+
+    return isValidForm
 }

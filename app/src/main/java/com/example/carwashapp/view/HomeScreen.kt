@@ -15,24 +15,25 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.carwashapp.R
+import com.example.carwashapp.navigation.AppScreens
 
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navController: NavController){
     Scaffold() {
-        ContentHomeScreen()
+        ContentHomeScreen(navController)
     }
 }
 
 @Composable
-fun ContentHomeScreen(){
+fun ContentHomeScreen(navController: NavController){
     val scrollState = rememberScrollState()
     Column(modifier = Modifier.verticalScroll(scrollState)) {
-        CardList(title = stringResource(id = R.string.title_card_services), subtitle = stringResource(id = R.string.subtitle_card_services))
-        CardClients(title = stringResource(id = R.string.title_card_clientsvip), subtitle = stringResource(id = R.string.subtitle_card_clientsvip))
-        CardAdmin(title = stringResource(id = R.string.title_card_admin), subtitle = stringResource(id = R.string.subtitle_card_admin))
+        CardList(title = stringResource(id = R.string.title_card_services), subtitle = stringResource(id = R.string.subtitle_card_services), navController)
+        CardClients(title = stringResource(id = R.string.title_card_clientsvip), subtitle = stringResource(id = R.string.subtitle_card_clientsvip), navController)
+        CardAdmin(title = stringResource(id = R.string.title_card_admin), subtitle = stringResource(id = R.string.subtitle_card_admin), navController)
     }
 }
 
@@ -82,7 +83,7 @@ fun ImageCardAdmin(){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardList(title:String, subtitle:String){
+fun CardList(title:String, subtitle:String, navController: NavController){
     val configuration = LocalConfiguration.current
     Card(
         modifier = Modifier
@@ -94,7 +95,7 @@ fun CardList(title:String, subtitle:String){
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colors.background,
         onClick = {
-
+            navController.navigate(AppScreens.ServiceList.route)
         }
     ) {
         when (configuration.orientation) {
@@ -122,7 +123,7 @@ fun CardList(title:String, subtitle:String){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardClients(title:String, subtitle:String){
+fun CardClients(title:String, subtitle:String, navController: NavController){
     val configuration = LocalConfiguration.current
     Card(
         modifier = Modifier
@@ -160,7 +161,7 @@ fun CardClients(title:String, subtitle:String){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardAdmin(title:String, subtitle:String){
+fun CardAdmin(title:String, subtitle:String, navController: NavController){
     val configuration = LocalConfiguration.current
     Card(
         modifier = Modifier
@@ -195,11 +196,4 @@ fun CardAdmin(title:String, subtitle:String){
         }
 
     }
-}
-
-@Preview(showSystemUi = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun PreviewHomeScreen() {
-    HomeScreen()
 }

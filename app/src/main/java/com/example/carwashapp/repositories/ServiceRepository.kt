@@ -73,5 +73,13 @@ constructor(
         }
     }
 
+    fun deleteService(serviceId: String){
+        try {
+            serviceList.document(serviceId).delete()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
+
 
 }
