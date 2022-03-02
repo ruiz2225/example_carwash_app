@@ -4,6 +4,7 @@ import androidx.navigation.compose.NamedNavArgument
 import androidx.navigation.compose.navArgument
 
 sealed class AppScreens(val route: String, val arguments: List<NamedNavArgument>){
+    object SplashScreen: AppScreens("splash_screen", emptyList())
     object HomeScreen: AppScreens("home_screen", emptyList())
     object ServiceList: AppScreens("service_list", emptyList())
     object ServiceDetail: AppScreens(

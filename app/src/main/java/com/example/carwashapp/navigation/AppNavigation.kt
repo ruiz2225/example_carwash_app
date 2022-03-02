@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.carwashapp.view.AnimatedSplashScreen
 import com.example.carwashapp.view.HomeScreen
 import com.example.carwashapp.view.services.ServiceFormScreen
 import com.example.carwashapp.view.services.ServiceListScreen
@@ -19,7 +20,12 @@ import com.example.carwashapp.view_model.ServiceListViewModel
 fun AppNavigation(){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = AppScreens.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = AppScreens.SplashScreen.route) {
+
+        composable(route = AppScreens.SplashScreen.route){
+            AnimatedSplashScreen(navController)
+        }
+
         composable(route = AppScreens.HomeScreen.route){
             HomeScreen(navController)
         }
